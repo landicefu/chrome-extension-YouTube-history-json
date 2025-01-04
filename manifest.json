@@ -3,7 +3,15 @@
   "name": "YouTube Playback History",
   "version": "1.0",
   "description": "A Chrome extension to track YouTube playback history.",
-  "permissions": ["storage", "tabs"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "clipboard-write"
+  ],
+  "host_permissions": [
+    "*://*.youtube.com/*"
+  ],
   "background": {
     "service_worker": "background.js"
   },
