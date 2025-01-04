@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Playback History",
+  "version": "1.0",
+  "description": "A Chrome extension to track YouTube playback history.",
+  "permissions": ["storage", "tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
