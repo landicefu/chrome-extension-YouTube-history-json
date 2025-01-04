@@ -94,7 +94,7 @@ function capturePlaybackHistory() {
             thumbnailUrl,
             channel: {
                 name: channelName,
-                url: channelUrl ? `https://www.youtube.com${channelUrl}` : null
+                url: channelUrl || null
             },
             viewCount,
             description
