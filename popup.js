@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const messageElement = document.getElementById('message');
 
         if (url.hostname === 'www.youtube.com' && url.pathname === '/feed/history') {
-            descriptionElement.innerText = 'This is a long description of how the plugin works...';
             captureButton.style.display = 'block';
             messageElement.style.display = 'none';
         } else {
