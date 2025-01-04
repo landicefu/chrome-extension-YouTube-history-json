@@ -3,6 +3,8 @@
 ## Overview
 This Chrome extension captures the YouTube playback history page and transforms the on-screen elements into JSON format. It is designed to help users easily manage and analyze their YouTube watch history by converting it into a structured data format.
 
+![Screenshot of YouTube Playback History Extension](screenshot.jpg)
+
 ## Features
 - Capture YouTube playback history directly from the browser.
 - Convert on-screen elements into JSON format.
