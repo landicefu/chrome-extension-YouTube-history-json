@@ -42,7 +42,6 @@
       margin-top: 10px;
     }
     #captureButton {
-      margin-top: 10px;
       padding: 12px 24px;
       font-size: 16px;
       cursor: pointer;
@@ -50,12 +49,12 @@
       color: white;
       border: none;
       border-radius: 4px;
+      margin-right: 10px;
     }
     #captureButton:hover {
       background-color: #0056bf;
     }
     #downloadButton {
-      margin-top: 10px;
       padding: 12px 24px;
       font-size: 16px;
       cursor: pointer;
@@ -67,7 +66,8 @@
     #downloadButton:hover {
       background-color: #0056bf;
     }
-    #message {
+    .button-container {
+      display: flex;
       margin-top: 10px;
     }
   </style>
@@ -86,8 +86,10 @@
     <p style="margin-top: 15px;">If you encounter any issues with this plugin, please report them by emailing <a href="mailto:landice.fu@gmail.com" target="_blank">landice.fu@gmail.com</a>.</p>
   </div>
   <div id="content">
-    <button id="captureButton" style="display: none;">Copy</button>
-    <button id="downloadButton" style="display: none;">Download</button>
+    <div class="button-container">
+      <button id="captureButton" style="display: none;">Copy</button>
+      <button id="downloadButton" style="display: none;">Download</button>
+    </div>
     <div id="message"></div>
   </div>
 </body>
