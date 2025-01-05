@@ -54,6 +54,19 @@
     #captureButton:hover {
       background-color: #0056bf;
     }
+    #downloadButton {
+      margin-top: 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #065fd4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    #downloadButton:hover {
+      background-color: #0056bf;
+    }
     #message {
       margin-top: 10px;
     }
@@ -67,13 +80,14 @@
     <ol>
       <li>Go to <a href="https://www.youtube.com/feed/history" target="_blank">YouTube History page</a></li>
       <li>Scroll down to load as much history as you need</li>
-      <li>Click the "Capture" button below</li>
+      <li>Click the "Copy to Clipboard" button below</li>
       <li>The history data will be copied to your clipboard as JSON format</li>
     </ol>
     <p style="margin-top: 15px;">If you encounter any issues with this plugin, please report them by emailing <a href="mailto:landice.fu@gmail.com" target="_blank">landice.fu@gmail.com</a>.</p>
   </div>
   <div id="content">
-    <button id="captureButton" style="display:none;">Capture</button>
+    <button id="captureButton" style="display: none;">Copy</button>
+    <button id="downloadButton" style="display: none;">Download</button>
     <div id="message"></div>
   </div>
 </body>

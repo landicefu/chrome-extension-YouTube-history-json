@@ -4,26 +4,46 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         const currentTab = tabs[0];
         const captureButton = document.getElementById('captureButton');
+        const downloadButton = document.getElementById('downloadButton');
         const messageDiv = document.getElementById('message');
 
         if (currentTab.url.includes('youtube.com/feed/history')) {
             captureButton.style.display = 'block';
-            captureButton.addEventListener('click', () => {
+            downloadButton.style.display = 'block';
+
+            const captureAndProcess = (action) => {
                 chrome.scripting.executeScript({
                     target: { tabId: currentTab.id },
                     function: capturePlaybackHistory
                 }).then((results) => {
                     if (results[0].result) {
                         const historyData = results[0].result;
-                        navigator.clipboard.writeText(JSON.stringify(historyData, null, 2))
-                            .then(() => {
-                                messageDiv.textContent = `Found ${historyData.length} items. History data copied to clipboard!`;
-                                messageDiv.style.color = 'green';
-                            })
-                            .catch((err) => {
-                                messageDiv.textContent = `Failed to copy to clipboard: ${err.message}`;
-                                messageDiv.style.color = 'red';
-                            });
+                        const jsonData = JSON.stringify(historyData, null, 2);
+
+                        if (action === 'copy') {
+                            navigator.clipboard.writeText(jsonData)
+                                .then(() => {
+                                    messageDiv.textContent = `Found ${historyData.length} items. History data copied to clipboard!`;
+                                    messageDiv.style.color = 'green';
+                                })
+                                .catch((err) => {
+                                    messageDiv.textContent = `Failed to copy to clipboard: ${err.message}`;
+                                    messageDiv.style.color = 'red';
+                                });
+                        } else if (action === 'download') {
+                            const blob = new Blob([jsonData], { type: 'application/json' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            const date = new Date().toISOString().split('T')[0];
+                            a.href = url;
+                            a.download = `youtube-history-${date}.json`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                            messageDiv.textContent = `Found ${historyData.length} items. History data downloaded!`;
+                            messageDiv.style.color = 'green';
+                        }
                     } else {
                         messageDiv.textContent = 'Failed to capture history data.';
                         messageDiv.style.color = 'red';
@@ -32,7 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     messageDiv.textContent = `Error: ${err.message}`;
                     messageDiv.style.color = 'red';
                 });
-            });
+            };
+
+            captureButton.addEventListener('click', () => captureAndProcess('copy'));
+            downloadButton.addEventListener('click', () => captureAndProcess('download'));
         } else {
             messageDiv.textContent = 'Please navigate to YouTube History page first.';
             messageDiv.style.color = 'orange';
