@@ -41,13 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function capturePlaybackHistory() {
-    const historyContainer = document.querySelector('#contents');
-    if (!historyContainer) {
-        console.error('History container not found');
-        return;
-    }
-
-    const historyItems = historyContainer.querySelectorAll('ytd-video-renderer');
+    const historyItems = document.querySelectorAll('ytd-video-renderer');
     const historyData = Array.from(historyItems).map(item => {
         // Extract video ID from href
         const videoLink = item.querySelector('#thumbnail').href;
