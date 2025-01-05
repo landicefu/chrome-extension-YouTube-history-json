@@ -68,9 +68,15 @@
     }
     .button-container {
       display: flex;
-      align-items: center;
-      margin-top: 10px;
+      align-items: flex-start;
       gap: 10px;
+      flex-direction: column;
+      margin-top: 10px;
+    }
+    .button-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
     }
     #formatSelect {
       padding: 8px;
@@ -83,6 +89,9 @@
     #formatSelect:focus {
       outline: none;
       border-color: #065fd4;
+    }
+    #message {
+      margin-top: 15px;
     }
   </style>
   <script src="popup.js"></script>
@@ -101,12 +110,14 @@
   </div>
   <div id="content">
     <div class="button-container">
-      <button id="captureButton" style="display: none;">Copy</button>
       <select id="formatSelect" style="display: none;">
         <option value="json">JSON</option>
         <option value="csv">CSV</option>
       </select>
-      <button id="downloadButton" style="display: none;">Download</button>
+      <div class="button-row">
+        <button id="captureButton" style="display: none;">Copy</button>
+        <button id="downloadButton" style="display: none;">Download</button>
+      </div>
     </div>
     <div id="message"></div>
   </div>
