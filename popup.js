@@ -5,11 +5,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentTab = tabs[0];
         const captureButton = document.getElementById('captureButton');
         const downloadButton = document.getElementById('downloadButton');
+        const formatSelect = document.getElementById('formatSelect');
         const messageDiv = document.getElementById('message');
 
         if (currentTab.url.includes('youtube.com/feed/history')) {
             captureButton.style.display = 'block';
             downloadButton.style.display = 'block';
+            formatSelect.style.display = 'block';
+
+            const convertToCSV = (historyData) => {
+                const headers = ['videoId', 'title', 'channelName', 'channelUrl', 'duration', 'progressPercentage', 'viewCount', 'description', 'thumbnailUrl'];
+                const rows = [headers];
+
+                historyData.forEach(item => {
+                    rows.push([
+                        item.videoId || '',
+                        (item.title || '').replace(/"/g, '""'),
+                        (item.channel.name || '').replace(/"/g, '""'),
+                        item.channel.url || '',
+                        item.duration || '',
+                        item.progress || '',
+                        item.viewCount || '',
+                        (item.description || '').replace(/"/g, '""'),
+                        item.thumbnailUrl || ''
+                    ]);
+                });
+
+                return rows.map(row => 
+                    row.map(cell => `"${cell}"`).join(',')
+                ).join('\n');
+            };
 
             const captureAndProcess = (action) => {
                 chrome.scripting.executeScript({
@@ -18,10 +43,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).then((results) => {
                     if (results[0].result) {
                         const historyData = results[0].result;
-                        const jsonData = JSON.stringify(historyData, null, 2);
+                        const format = document.getElementById('formatSelect').value;
+                        let data, mimeType, fileExtension;
+
+                        if (format === 'json') {
+                            data = JSON.stringify(historyData, null, 2);
+                            mimeType = 'application/json';
+                            fileExtension = 'json';
+                        } else {
+                            data = convertToCSV(historyData);
+                            mimeType = 'text/csv';
+                            fileExtension = 'csv';
+                        }
 
                         if (action === 'copy') {
-                            navigator.clipboard.writeText(jsonData)
+                            navigator.clipboard.writeText(data)
                                 .then(() => {
                                     messageDiv.textContent = `Found ${historyData.length} items. History data copied to clipboard!`;
                                     messageDiv.style.color = 'green';
@@ -31,12 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                     messageDiv.style.color = 'red';
                                 });
                         } else if (action === 'download') {
-                            const blob = new Blob([jsonData], { type: 'application/json' });
+                            const blob = new Blob([data], { type: mimeType });
                             const url = URL.createObjectURL(blob);
                             const a = document.createElement('a');
                             const date = new Date().toISOString().split('T')[0];
                             a.href = url;
-                            a.download = `youtube-history-${date}.json`;
+                            a.download = `youtube-history-${date}.${fileExtension}`;
                             document.body.appendChild(a);
                             a.click();
                             document.body.removeChild(a);
