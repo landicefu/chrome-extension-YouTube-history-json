@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const historyData = results[0].result;
                         navigator.clipboard.writeText(JSON.stringify(historyData, null, 2))
                             .then(() => {
-                                messageDiv.textContent = 'History data copied to clipboard!';
+                                messageDiv.textContent = `Found ${historyData.length} items. History data copied to clipboard!`;
                                 messageDiv.style.color = 'green';
                             })
                             .catch((err) => {
