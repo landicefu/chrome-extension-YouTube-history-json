@@ -50,10 +50,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             data = JSON.stringify(historyData, null, 2);
                             mimeType = 'application/json';
                             fileExtension = 'json';
-                        } else {
+                        } else if (format === 'csv') {
                             data = convertToCSV(historyData);
                             mimeType = 'text/csv';
                             fileExtension = 'csv';
+                        } else if (format === 'yaml') {
+                            data = jsyaml.dump(historyData, {
+                                indent: 2,
+                                lineWidth: -1,
+                                noRefs: true,
+                                quotingType: '"'
+                            });
+                            mimeType = 'application/x-yaml';
+                            fileExtension = 'yaml';
                         }
 
                         if (action === 'copy') {
